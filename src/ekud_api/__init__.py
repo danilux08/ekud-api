@@ -8,7 +8,7 @@ app = FastAPI()
 ytmusic = YTMusic()
 
 @app.get("/player/{videoId}", response_class=HTMLResponse)
-async def test(videoId: str):
+async def videoPlayer(videoId: str):
     return get_player_html(videoId)
 
 @app.post("/search")
