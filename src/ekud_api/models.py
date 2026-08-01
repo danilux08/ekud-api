@@ -7,12 +7,11 @@ class Artist:
         self.thumbnailUrl = thumbnailUrl
 
 class Song:
-    def __init__(self, id: str, title: str, artists: list[Artist], isExplicit: bool, streams: str, thumbnailUrl: str | None = None):
+    def __init__(self, id: str, title: str, artists: list[Artist], isExplicit: bool, thumbnailUrl: str | None = None):
         self.id = id
         self.title = title
         self.artists = artists
         self.isExplicit = isExplicit
-        self.streams = streams
         self.thumbnailUrl = thumbnailUrl
 
 class Album:
