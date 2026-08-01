@@ -14,7 +14,7 @@ async def videoPlayer(videoId: str):
 @app.post("/search")
 async def search(data: SearchData):
     query = data.query
-    results = ytmusic.search(query = f"{query}")
+    results = ytmusic.search(query = f"{query}", limit = 100)
     artists = []
     songs = []
     albums = []
@@ -60,8 +60,11 @@ async def search(data: SearchData):
         songArtists = []
         try:
             for songArtist in song["artists"]:
+                artistId = songArtist["id"]
+                if artistId is None:
+                    continue
                 songArtists.append(Artist(
-                    songArtist["id"],
+                    artistId,
                     songArtist["name"]
                 ))
         except:
@@ -83,8 +86,11 @@ async def search(data: SearchData):
         albumArtists = []
         try:
             for albumArtist in album["artists"]:
+                artistId = albumArtist["id"]
+                if artistId is None:
+                    continue
                 albumArtists.append(Artist(
-                    albumArtist["id"],
+                    artistId,
                     albumArtist["name"]
                 ))
         except:
