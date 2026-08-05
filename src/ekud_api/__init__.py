@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 from ytmusicapi import YTMusic
-from .models import Artist, Song, Album, Podcast, SearchData
+from .models import SearchData, Artist, Song, Album, Podcast, Episode
 from .player import get_player_html
 
 app = FastAPI()
@@ -11,7 +11,7 @@ ytmusic = YTMusic()
 async def videoPlayer(videoId: str):
     return get_player_html(videoId)
 
-SEARCH_LIMIT = 50
+SEARCH_LIMIT = 30
 
 @app.post("/search/artists")
 async def searchArtists(data: SearchData):
@@ -119,7 +119,7 @@ async def searchPodcasts(data: SearchData):
                 thumbnailUrl = result["thumbnails"][1]["url"]
             except:
                 pass
-            podcasts.append(Artist(
+            podcasts.append(Podcast(
                 result["browseId"],
                 result["title"],
                 thumbnailUrl
@@ -127,3 +127,25 @@ async def searchPodcasts(data: SearchData):
     except:
         print(f"Results of query {query} are invalid.")
     return podcasts
+
+@app.get("/episodes/{podcastId}")
+async def getEpisodes(podcastId: str):
+    result = ytmusic.get_podcast(podcastId)
+    episodes = []
+    try:
+        for episode in result["episodes"]:
+            if episode["videoType"] != "MUSIC_VIDEO_TYPE_PODCAST_EPISODE":
+                continue
+            thumbnailUrl = None
+            try:
+                thumbnailUrl = episode["thumbnails"][1]["url"]
+            except:
+                pass
+            episodes.append(Episode(
+                episode["videoId"],
+                episode["title"],
+                thumbnailUrl
+            ))
+    except:
+        print(f"No podcast with ID {podcastId} found.")
+    return episodes

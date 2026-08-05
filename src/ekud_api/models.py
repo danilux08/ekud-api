@@ -1,5 +1,8 @@
 from pydantic import BaseModel
 
+class SearchData(BaseModel):
+    query: str
+
 class Artist:
     def __init__(self, id: str, name: str, thumbnailUrl: str | None = None):
         self.id = id
@@ -24,10 +27,13 @@ class Album:
         self.thumbnailUrl = thumbnailUrl
 
 class Podcast:
+    def __init__(self, id: str, name: str, thumbnailUrl: str | None):
+        self.id = id
+        self.name = name
+        self.thumbnailUrl = thumbnailUrl
+
+class Episode:
     def __init__(self, id: str, title: str, thumbnailUrl: str | None):
         self.id = id
         self.title = title
         self.thumbnailUrl = thumbnailUrl
-
-class SearchData(BaseModel):
-    query: str
