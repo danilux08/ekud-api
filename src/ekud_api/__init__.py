@@ -13,6 +13,12 @@ async def videoPlayer(videoId: str):
 
 SEARCH_LIMIT = 30
 
+@app.get("/heartbeat")
+async def heartbeat():
+    return {
+        "message": "Heartbeat received successfully."
+    }
+
 @app.post("/search/artists")
 async def searchArtists(data: SearchData):
     query = data.query
